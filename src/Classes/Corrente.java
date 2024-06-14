@@ -1,15 +1,15 @@
+package Classes;
 import Interfaces.Pix;
 
 public class Corrente extends Conta implements Pix{
 
-    public Corrente(String numeroConta, String Correntista, String cpf) {
+    public Corrente(Integer numeroConta, String Correntista, String cpf) {
         super(numeroConta, Correntista, cpf);
     }
 
     @Override
-    public void mostrarDetalhes() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mostrarDetalhes'");
+    public String mostrarDetalhes() {
+        return "Conta Corrente Nº: " + this.numeroConta + " - Correntista: " + this.Correntista + " - Cpf: " + this.cpf;
     }
 
     @Override

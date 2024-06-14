@@ -1,17 +1,31 @@
+package Classes;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-abstract class Conta{
-    protected String numeroConta;
+abstract public class Conta{
+    protected Integer numeroConta;
     protected String Correntista;
     protected String cpf;
     protected ArrayList<Operacao> operacoes;
 
-    public Conta(String numeroConta, String Correntista, String cpf) {
+    public Conta(Integer numeroConta, String Correntista, String cpf) {
         this.numeroConta = numeroConta;
         this.Correntista = Correntista;
         this.cpf = cpf;
         this.operacoes = new ArrayList<>();
+    }
+
+    public Integer getNumeroConta() {
+        return numeroConta;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public ArrayList<Operacao> getOperacoes() {
+        return operacoes;
     }
 
     public void depositar(double valor) {
@@ -36,6 +50,5 @@ abstract class Conta{
         return saldo;
     }
 
-    // Método abstrato para ser implementado nas subclasses
-    public abstract void mostrarDetalhes();
+    public abstract String mostrarDetalhes();
 }
