@@ -1,7 +1,10 @@
 package Classes;
+
+import java.util.Date;
+
 import Interfaces.Pix;
 
-public class Corrente extends Conta implements Pix{
+public class Corrente extends Conta implements Pix {
 
     public Corrente(Integer numeroConta, String Correntista, String cpf) {
         super(numeroConta, Correntista, cpf);
@@ -13,21 +16,18 @@ public class Corrente extends Conta implements Pix{
     }
 
     @Override
-    public String CadastrarPix(String cpf) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'CadastrarPix'");
+    public String CadastrarPix() {
+        return String.valueOf(this.cpf);
     }
 
     @Override
-    public Double EfetuarPix(String cpfDestino, Double valor) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'EfetuarPix'");
+    public void EfetuarPix(String cpfDestino, Double valor) {
+        super.operacoes.add(new Operacao(new Date(), valor, "PixOUT"));
     }
-
+    
     @Override
-    public Double ReceberPix(String cpfOrigem, Double valor) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'ReceberPix'");
+    public void ReceberPix(String cpfOrigem, Double valor) {
+        super.operacoes.add(new Operacao(new Date(), valor, "PixIN"));
     }
 
     @Override

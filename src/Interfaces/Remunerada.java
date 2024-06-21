@@ -2,5 +2,5 @@ package Interfaces;
 
 public interface Remunerada {
     
-    public Double AplicaTxDeCorrecao();
+    public Double AplicaTxDeCorrecao(Double Taxa);
 }

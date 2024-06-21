@@ -2,7 +2,7 @@ package Interfaces;
 
 public interface Pix {
     
-    public String CadastrarPix(String cpf);
-    public Double EfetuarPix(String cpfDestino, Double valor);
-    public Double ReceberPix(String cpfOrigem, Double valor);
+    public String CadastrarPix();
+    public void EfetuarPix(String cpfDestino, Double valor);
+    public void ReceberPix(String cpfOrigem, Double valor);
 }

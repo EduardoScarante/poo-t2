@@ -3,6 +3,7 @@
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -20,7 +21,7 @@ public class Banco {
 
     public static void main(String[] args) {
         /* ADICIONANDO INFOS DE INICIALIZAÇÂO DE APLICAÇÂO */
-        contas.add(new Corrente(12345, "Eduardo", "10010010000"));
+        contas.add(new Poupanca(12345, "Eduardo", "10010010000"));
         contas.add(new Corrente(11111, "Claudio", "10010010000"));
         contas.add(new Corrente(54345, "Ayla", "10010010000"));
         contas.add(new Poupanca(90908, "Lola", "10010010000"));
@@ -31,7 +32,6 @@ public class Banco {
         contas.get(0).depositar(100);
         contas.get(0).depositar(30);
         contas.get(0).sacar(130);
-
 
         int opcao;
         System.out.println("Bem-vindo ao Banco Object! :)");
@@ -75,6 +75,7 @@ public class Banco {
                     cadastraPix();
                     break;
                 case 7:
+                    fazerPix();
                     break;
                 case 8:
                     extrato();
@@ -144,14 +145,18 @@ public class Banco {
         }
     }
 
-    public static void cadastraPix(){
+    public static void cadastraPix() {
         System.out.println("Informe número de conta para cadastrar PIX");
         String numeroConta = teclado.nextLine();
 
         for (Conta conta : contas) {
             if (conta.getNumeroConta().equals(Integer.parseInt(numeroConta))) {
-                contasComPix.add(conta.getCpf());
-                System.out.println("PIX criado para conta: " + conta.getNumeroConta());
+                if (conta instanceof Corrente) {
+                    contasComPix.add(((Corrente) conta).CadastrarPix());
+                    System.out.println("PIX criado para conta: " + conta.getNumeroConta());
+                } else {
+                    System.out.println("Essa conta é poupança, não pode ser criado PIX para a mesma");
+                }
                 break;
             }
         }
@@ -176,43 +181,68 @@ public class Banco {
                         saldo += valor;
                     } else if (tipo.equalsIgnoreCase("Saque") || tipo.equalsIgnoreCase("PIX Out")) {
                         saldo += valor;
-                    } else if (tipo.equalsIgnoreCase("PIX In")) {
+                    } else if (tipo.equalsIgnoreCase("PixIN")) {
                         saldo += valor;
+                    } else if (tipo.equalsIgnoreCase("PixOUT")) {
+                        saldo -= valor;
+                    } else if (tipo.equalsIgnoreCase("Correção")) {
+                        saldo *= (1 + operacao.getValor());
                     }
 
                     System.out.println(data + " " + tipo + " " + String.format("%.2f", valor));
                     System.out.println("           Saldo " + String.format("%.2f", saldo));
-                };
+                }
+                ;
                 break;
             }
         }
     }
 
-    public void aplicaCorrecaoMonetaria(){
-        System.out.println("Informe a taxa da correção monetária:");
+    public static void aplicaCorrecaoMonetaria() {
+        System.out.println("Informe a taxa da correção monetária: [Apenas números em %]");
         String taxa = teclado.next();
+        System.out.println("Correção monetária de " + taxa + "aplicado a todas as contas poupanças!");
+        for (Conta conta : contas) {
+            if (conta instanceof Poupanca)
+                ((Poupanca) conta).AplicaTxDeCorrecao(Double.parseDouble(taxa));
+        }
 
+    }
 
+    public static void fazerPix(){
+        System.out.println("Informe o número da conta que o PIX está saindo");
+        String contaOut = teclado.next();
+
+        System.out.println("Informe o valor");
+        String valor = teclado.next();
+
+        System.out.println("informe o cpf do destinatário do PIX");
+        String cpfDestino = teclado.next();
+
+        /* for(String conta : contasComPix){
+            if(conta.equals(cpfDestino){
+                System.out.println(conta);
+            }
+        } */
     }
 
     /* FUNÇÔES DE UTILIDADE GERAL */
 
-
-    public static Integer utilGeradorDeNumeroDeconta(){
+    public static Integer utilGeradorDeNumeroDeconta() {
         Random random = new Random();
         int min = 10000;
         int max = 99999;
         return random.nextInt((max - min) + 1) + min;
     }
 
-    public static void utilVerTodasContas(){
+    public static void utilVerTodasContas() {
         for (Conta conta : contas) {
             System.out.println(conta.mostrarDetalhes());
         }
     }
 
-    public static void verTodosPix(){
-        for(String cpf : contasComPix){
+    public static void verTodosPix() {
+        for (String cpf : contasComPix) {
             System.out.println(cpf);
         }
     }

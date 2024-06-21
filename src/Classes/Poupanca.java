@@ -1,4 +1,6 @@
 package Classes;
+import java.util.Date;
+
 import Interfaces.Remunerada;
 
 public class Poupanca extends Conta implements Remunerada{
@@ -8,8 +10,9 @@ public class Poupanca extends Conta implements Remunerada{
     }
 
     @Override
-    public Double AplicaTxDeCorrecao() {
-        return null;
+    public Double AplicaTxDeCorrecao(Double tx) {
+        super.operacoes.add(new Operacao(new Date(), tx/100, "Correção"));
+        return tx;
     }
 
     @Override
