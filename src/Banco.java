@@ -3,7 +3,6 @@
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -17,16 +16,22 @@ public class Banco {
     private static Scanner teclado = new Scanner(System.in);
 
     protected static ArrayList<Conta> contas = new ArrayList<>();
-    protected static ArrayList<String> contasComPix = new ArrayList<>();
+    protected static ArrayList<Corrente> contasComPix = new ArrayList<>();
 
     public static void main(String[] args) {
         /* ADICIONANDO INFOS DE INICIALIZAÇÂO DE APLICAÇÂO */
-        contas.add(new Poupanca(12345, "Eduardo", "10010010000"));
-        contas.add(new Corrente(11111, "Claudio", "10010010000"));
-        contas.add(new Corrente(54345, "Ayla", "10010010000"));
-        contas.add(new Poupanca(90908, "Lola", "10010010000"));
-        contas.add(new Poupanca(45145, "Joao", "10010010000"));
-        contas.add(new Poupanca(65742, "Maria", "10010010000"));
+        Corrente a1 = new Corrente(11111, "Claudio", "456");
+        Corrente a2 = new Corrente(54345, "Ayla", "789");
+        contas.add(a1);
+        contas.add(a2);
+
+        contasComPix.add(a1);
+        contasComPix.add(a2);
+
+        contas.add(new Poupanca(12345, "Eduardo", "123"));
+        contas.add(new Poupanca(90908, "Lola", "135"));
+        contas.add(new Poupanca(45145, "Joao", "246"));
+        contas.add(new Poupanca(65742, "Maria", "357"));
 
         contas.get(0).depositar(50);
         contas.get(0).depositar(100);
@@ -172,28 +177,33 @@ public class Banco {
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                 double saldo = 0.0;
 
-                for (Operacao operacao : conta.getOperacoes()) {
-                    String data = sdf.format(operacao.getData());
-                    String tipo = operacao.getIdentificador();
-                    double valor = operacao.getValor();
+        for (Operacao operacao : conta.getOperacoes()) {
+            String data = sdf.format(operacao.getData());
+            String tipo = operacao.getIdentificador();
+            double valor = operacao.getValor();
 
-                    if (tipo.equalsIgnoreCase("Depósito")) {
-                        saldo += valor;
-                    } else if (tipo.equalsIgnoreCase("Saque") || tipo.equalsIgnoreCase("PIX Out")) {
-                        saldo += valor;
-                    } else if (tipo.equalsIgnoreCase("PixIN")) {
-                        saldo += valor;
-                    } else if (tipo.equalsIgnoreCase("PixOUT")) {
-                        saldo -= valor;
-                    } else if (tipo.equalsIgnoreCase("Correção")) {
-                        saldo *= (1 + operacao.getValor());
-                    }
+            // Atualizando o saldo com base no tipo de operação
+            switch (tipo.toLowerCase()) {
+                case "depósito":
+                case "pix - entrada":
+                    saldo += valor;
+                    break;
+                case "saque":
+                case "pix - saída":
+                case "pix out":
+                    saldo -= valor;
+                    break;
+                case "correção":
+                    saldo *= (1 + valor);
+                    break;
+                default:
+                    System.out.println("Tipo de operação desconhecido: " + tipo);
+            }
 
-                    System.out.println(data + " " + tipo + " " + String.format("%.2f", valor));
-                    System.out.println("           Saldo " + String.format("%.2f", saldo));
-                }
-                ;
-                break;
+            // Exibindo a operação e o saldo atualizado
+            System.out.println(data + " " + tipo + " " + String.format("%.2f", valor));
+            System.out.println("           Saldo " + String.format("%.2f", saldo));
+        }
             }
         }
     }
@@ -209,21 +219,26 @@ public class Banco {
 
     }
 
-    public static void fazerPix(){
-        System.out.println("Informe o número da conta que o PIX está saindo");
-        String contaOut = teclado.next();
+    public static void fazerPix() {
+        System.out.println("Informe o CPF PIX da conta de origem:");
+        String cpfOrigem = teclado.next();
+        System.out.println("informe o cpf PIX da conta destino:");
+        String cpfDestino = teclado.next();
 
         System.out.println("Informe o valor");
         String valor = teclado.next();
 
-        System.out.println("informe o cpf do destinatário do PIX");
-        String cpfDestino = teclado.next();
-
-        /* for(String conta : contasComPix){
-            if(conta.equals(cpfDestino){
-                System.out.println(conta);
+        for (Corrente contas : contasComPix) {
+            if (contas.getCpf().equals(cpfOrigem)) {
+                Corrente contaPixIn = contas;
+                contaPixIn.ReceberPix(cpfOrigem, Double.parseDouble(valor));
             }
-        } */
+
+            if (contas.getCpf().equals(cpfDestino)) {
+                Corrente contaPixOut = contas;
+                contaPixOut.EfetuarPix(cpfDestino, Double.parseDouble(valor));
+            }
+        }
     }
 
     /* FUNÇÔES DE UTILIDADE GERAL */
@@ -242,8 +257,8 @@ public class Banco {
     }
 
     public static void verTodosPix() {
-        for (String cpf : contasComPix) {
-            System.out.println(cpf);
+        for (Corrente conta : contasComPix) {
+            System.out.println("Numero da conta: " + conta.getNumeroConta() + " Cpf: " + conta.getCpf());
         }
     }
 

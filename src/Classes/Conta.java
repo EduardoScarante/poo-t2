@@ -19,6 +19,10 @@ abstract public class Conta{
         return numeroConta;
     }
 
+    public String getCorrentista() {
+        return Correntista;
+    }
+
     public String getCpf() {
         return cpf;
     }

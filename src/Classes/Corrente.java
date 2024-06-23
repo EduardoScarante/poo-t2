@@ -16,18 +16,18 @@ public class Corrente extends Conta implements Pix {
     }
 
     @Override
-    public String CadastrarPix() {
-        return String.valueOf(this.cpf);
+    public Corrente CadastrarPix() {
+        return new Corrente(numeroConta, Correntista, cpf);
     }
 
     @Override
     public void EfetuarPix(String cpfDestino, Double valor) {
-        super.operacoes.add(new Operacao(new Date(), valor, "PixOUT"));
+        super.operacoes.add(new Operacao(new Date(), valor, "Pix - Saída"));
     }
     
     @Override
     public void ReceberPix(String cpfOrigem, Double valor) {
-        super.operacoes.add(new Operacao(new Date(), valor, "PixIN"));
+        super.operacoes.add(new Operacao(new Date(), valor, "Pix - Entrada"));
     }
 
     @Override
