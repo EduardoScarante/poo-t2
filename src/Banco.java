@@ -20,23 +20,34 @@ public class Banco {
 
     public static void main(String[] args) {
         /* ADICIONANDO INFOS DE INICIALIZAÇÂO DE APLICAÇÂO */
-        Corrente a1 = new Corrente(11111, "Claudio", "456");
-        Corrente a2 = new Corrente(54345, "Ayla", "789");
+        Corrente a1 = new Corrente(11111, "Simba", "456");
+        Corrente a2 = new Corrente(12345, "Mufasa", "789");
         contas.add(a1);
         contas.add(a2);
-
+        
         contasComPix.add(a1);
         contasComPix.add(a2);
+        
+        contas.add(new Poupanca(54345, "Nala", "123"));
+        contas.add(new Poupanca(90908, "Scar", "135"));
+        contas.add(new Poupanca(45145, "Timon", "246"));
+        contas.add(new Poupanca(65742, "Pumbaa", "357"));
 
-        contas.add(new Poupanca(12345, "Eduardo", "123"));
-        contas.add(new Poupanca(90908, "Lola", "135"));
-        contas.add(new Poupanca(45145, "Joao", "246"));
-        contas.add(new Poupanca(65742, "Maria", "357"));
-
+        // CRIANDO OPERAÇÕES PARA INICIAR O SISTEMA
         contas.get(0).depositar(50);
         contas.get(0).depositar(100);
         contas.get(0).depositar(30);
         contas.get(0).sacar(130);
+
+        contas.get(1).depositar(150);
+        contas.get(1).sacar(70);
+        contas.get(1).sacar(15);
+        contas.get(1).depositar(100);
+
+        contas.get(2).depositar(500);
+        contas.get(2).depositar(750);
+        contas.get(2).sacar(660);
+
 
         int opcao;
         System.out.println("Bem-vindo ao Banco Object! :)");
@@ -52,9 +63,10 @@ public class Banco {
             System.out.println("6 - Cadastrar Pix");
             System.out.println("7 - Efetuar Pix");
             System.out.println("8 - Consultar Extrato");
+            System.out.println("- - - - - - - - - - -");
 
             System.out.println("99 - Extra Ver contas");
-            System.out.println("98 - Extra Ver contas com PIX");
+            System.out.println("100 - Extra Ver contas com PIX");
 
             System.out.print("\n>> Opcao?  ");
 
@@ -88,7 +100,7 @@ public class Banco {
                 case 99:
                     utilVerTodasContas();
                     break;
-                case 98:
+                case 100:
                     verTodosPix();
                     break;
             }
@@ -104,9 +116,9 @@ public class Banco {
 
         Conta novaConta = new Corrente(utilGeradorDeNumeroDeconta(), nome, cpf);
         contas.add(novaConta);
-        System.out.println("Nova conta cadastrada: " + novaConta.toString());
+        System.out.println("Nova conta Corrente cadastrada");
     }
-
+    
     public static void criarContaPoupanca() {
         System.out.println("Informe NOME do Correntista");
         String nome = teclado.nextLine();
@@ -115,7 +127,8 @@ public class Banco {
         System.out.println("\n");
 
         Conta novaConta = new Corrente(utilGeradorDeNumeroDeconta(), nome, cpf);
-        System.out.println(novaConta.toString());
+        contas.add(novaConta);
+        System.out.println("Nova conta Poupança cadastrada");
     }
 
     public static void depositar() {
@@ -182,7 +195,6 @@ public class Banco {
             String tipo = operacao.getIdentificador();
             double valor = operacao.getValor();
 
-            // Atualizando o saldo com base no tipo de operação
             switch (tipo.toLowerCase()) {
                 case "depósito":
                 case "pix - entrada":
@@ -191,7 +203,7 @@ public class Banco {
                 case "saque":
                 case "pix - saída":
                 case "pix out":
-                    saldo -= valor;
+                    saldo += valor;
                     break;
                 case "correção":
                     saldo *= (1 + valor);
