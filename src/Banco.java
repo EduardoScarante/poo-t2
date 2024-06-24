@@ -126,7 +126,7 @@ public class Banco {
         String cpf = teclado.nextLine();
         System.out.println("\n");
 
-        Conta novaConta = new Corrente(utilGeradorDeNumeroDeconta(), nome, cpf);
+        Conta novaConta = new Poupanca(utilGeradorDeNumeroDeconta(), nome, cpf);
         contas.add(novaConta);
         System.out.println("Nova conta Poupança cadastrada");
     }
